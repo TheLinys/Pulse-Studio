@@ -1,0 +1,18 @@
+# Directories
+.vs/
+Binaries/
+Binaries-Intermediates/
+
+# Files
+*.vcxproj
+*.vcxproj.user
+*.vcxproj.filters
+*.sln
+*.log
+Icon.txt
+AddSubmodules.txt
+*.png
+Makefile
+
+# Exclude
+!Vendor/Binaries

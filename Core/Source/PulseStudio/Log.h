@@ -1,0 +1,101 @@
+#pragma once
+
+#include <string>
+#include <fstream>
+#include <mutex>
+#include <iostream>
+#include <chrono>
+#include <iomanip>
+#include <sstream>
+#include <vector>
+
+// Platform-specific console color codes
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
+// Log level enumeration - in the order you specified
+enum class LogLevel 
+{
+    Debug,      // Light blue
+    Trace,      // Light gray
+    Info,       // White
+    Warn,       // Orange-yellow
+    Error,      // Bright red
+    Fatal       // Dark red
+};
+
+// Logger singleton class
+class Logger 
+{
+public:
+    // Get singleton instance
+    static Logger& getInstance();
+
+    // Initialize the logger
+    void init(const std::string& logFilePath = "PulseStudioLog.log",
+        LogLevel consoleLevel = LogLevel::Debug,  // Changed to show debug by default
+        LogLevel fileLevel = LogLevel::Debug);
+
+    // Set log levels
+    void setConsoleLevel(LogLevel level);
+    void setFileLevel(LogLevel level);
+
+    // Logging methods
+    void log(LogLevel level, const std::string& message,
+        const std::string& file = "", int line = -1);
+
+    // Convenience logging methods
+    void debug(const std::string& message, const std::string& file = "", int line = -1);
+    void trace(const std::string& message, const std::string& file = "", int line = -1);
+    void info(const std::string& message, const std::string& file = "", int line = -1);
+    void warn(const std::string& message, const std::string& file = "", int line = -1);
+    void error(const std::string& message, const std::string& file = "", int line = -1);
+    void fatal(const std::string& message, const std::string& file = "", int line = -1);
+
+    // Shutdown the logger
+    void shutdown();
+
+    // Disable copying and assignment
+    Logger(const Logger&) = delete;
+    Logger& operator=(const Logger&) = delete;
+
+private:
+    Logger();
+    ~Logger();
+
+    // Get current timestamp in specified format
+    std::string getTimestamp();
+
+    // Convert log level to string with first letter capitalized
+    std::string levelToString(LogLevel level);
+
+    // Get console color code for log level
+    std::string getConsoleColor(LogLevel level);
+
+    // Reset console color
+    std::string getResetColor();
+
+    // Initialize console color support (Windows)
+    void initConsoleColor();
+
+    // Member variables
+    std::ofstream m_logFile;
+    LogLevel m_consoleLevel;
+    LogLevel m_fileLevel;
+    std::mutex m_mutex;
+    bool m_initialized;
+
+#ifdef _WIN32
+    HANDLE m_consoleHandle;
+    bool m_consoleColorSupported;
+#endif
+};
+
+// Convenience logging macros
+#define LOG_DEBUG(msg) Logger::getInstance().debug(msg, __FILE__, __LINE__)
+#define LOG_TRACE(msg) Logger::getInstance().trace(msg, __FILE__, __LINE__)
+#define LOG_INFO(msg) Logger::getInstance().info(msg, __FILE__, __LINE__)
+#define LOG_WARN(msg) Logger::getInstance().warn(msg, __FILE__, __LINE__)
+#define LOG_ERROR(msg) Logger::getInstance().error(msg, __FILE__, __LINE__)
+#define LOG_FATAL(msg) Logger::getInstance().fatal(msg, __FILE__, __LINE__)
