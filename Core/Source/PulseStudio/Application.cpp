@@ -21,7 +21,7 @@ namespace PulseStudio {
 
     void Application::Run()
     {
-        LOG_INFO("Pulse Studio initialized and running.");
+        LOG_TRACE("Pulse Studio initialized and running.");
         LOG_DEBUG("Hello from Pulse Studio!");
 
         while (true);

@@ -9,6 +9,7 @@ Binaries-Intermediates/
 *.vcxproj.filters
 *.sln
 *.log
+*.lnk
 Icon.txt
 AddSubmodules.txt
 *.png

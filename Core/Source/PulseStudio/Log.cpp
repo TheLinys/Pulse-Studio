@@ -48,10 +48,17 @@ void Logger::init(const std::string& logFilePath, LogLevel consoleLevel, LogLeve
 
     m_initialized = true;
 
-    // Log initialization completion
-    info("Logger initialized successfully");
-}
+    std::string timestamp = getTimestamp();
+    std::string message = "Logger initialized successfully";
+    std::string fullMessage = "[" + timestamp + "][Success] -> " + message;
 
+    std::cout << "\033[32m" << fullMessage << "\033[0m \n";
+
+    if (m_logFile.is_open()) {
+        m_logFile << fullMessage << std::endl;
+        m_logFile.flush();
+    }
+}
 // Set console log level
 void Logger::setConsoleLevel(LogLevel level) {
     std::lock_guard<std::mutex> lock(m_mutex);
@@ -141,7 +148,15 @@ void Logger::shutdown()
     std::lock_guard<std::mutex> lock(m_mutex);
 
     if (m_initialized) {
-        info("Logger shutting down");
+        std::string message = "Logger shutting down";
+        std::string timestamp = getTimestamp();
+        std::string fullMessage = "[" + timestamp + "][Info] -> " + message;
+
+        std::cout << fullMessage << std::endl;
+
+        if (m_logFile.is_open()) {
+            m_logFile << fullMessage << std::endl;
+        }
 
         if (m_logFile.is_open()) {
             m_logFile.close();
