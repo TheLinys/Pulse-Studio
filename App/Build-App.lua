@@ -10,7 +10,10 @@ project "App"
    includedirs
    {
       "Source",
-	  "../Core/Source"
+	  "../Core/Source",
+      "../Core/vendor/GLFW/include",
+      "../Core/vendor/Glad/include",
+      "../Core/vendor/JSON/include"
    }
 
    links

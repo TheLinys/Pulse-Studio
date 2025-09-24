@@ -1,13 +1,6 @@
 #pragma once
 
-#include <string>
-#include <fstream>
-#include <mutex>
-#include <iostream>
-#include <chrono>
-#include <iomanip>
-#include <sstream>
-#include <vector>
+#include "pspch.h"
 
 // Platform-specific console color codes
 #ifdef _WIN32
@@ -17,12 +10,12 @@
 // Log level enumeration - in the order you specified
 enum class LogLevel 
 {
-    Debug,      // Light blue
-    Trace,      // Light gray
-    Info,       // White
-    Warn,       // Orange-yellow
-    Error,      // Bright red
-    Fatal       // Dark red
+    Debug,
+    Trace,
+    Info,
+    Warn,
+    Error,
+    Fatal
 };
 
 // Logger singleton class
@@ -92,10 +85,26 @@ private:
 #endif
 };
 
-// Convenience logging macros
+// Client logging macros
 #define LOG_DEBUG(msg) Logger::getInstance().debug(msg, __FILE__, __LINE__)
 #define LOG_TRACE(msg) Logger::getInstance().trace(msg, __FILE__, __LINE__)
 #define LOG_INFO(msg) Logger::getInstance().info(msg, __FILE__, __LINE__)
 #define LOG_WARN(msg) Logger::getInstance().warn(msg, __FILE__, __LINE__)
 #define LOG_ERROR(msg) Logger::getInstance().error(msg, __FILE__, __LINE__)
 #define LOG_FATAL(msg) Logger::getInstance().fatal(msg, __FILE__, __LINE__)
+
+// Core logging macros
+#define LOG_CORE_DEBUG(msg) Logger::getInstance().debug(msg, __FILE__, __LINE__)
+#define LOG_CORE_TRACE(msg) Logger::getInstance().trace(msg, __FILE__, __LINE__)
+#define LOG_CORE_INFO(msg) Logger::getInstance().info(msg, __FILE__, __LINE__)
+#define LOG_CORE_WARN(msg) Logger::getInstance().warn(msg, __FILE__, __LINE__)
+#define LOG_CORE_ERROR(msg) Logger::getInstance().error(msg, __FILE__, __LINE__)
+#define LOG_CORE_FATAL(msg) Logger::getInstance().fatal(msg, __FILE__, __LINE__)
+
+// Variadic macros for formatted logging (using fmt library)
+#define PS_CORE_FATAL(...) Logger::getInstance().fatal(__VA_ARGS__)
+#define PS_CORE_ERROR(...) Logger::getInstance().error(__VA_ARGS__)
+#define PS_CORE_WARN(...) Logger::getInstance().warn(__VA_ARGS__)
+#define PS_CORE_INFO(...) Logger::getInstance().info(__VA_ARGS__)
+#define PS_CORE_TRACE(...) Logger::getInstance().trace(__VA_ARGS__)
+#define PS_CORE_DEBUG(...) Logger::getInstance().debug(__VA_ARGS__)

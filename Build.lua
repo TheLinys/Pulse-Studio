@@ -14,3 +14,6 @@ group "Core"
 group ""
 
 include "App/Build-App.lua"
+include "Core/vendor/GLFW"
+include "Core/vendor/Glad"
+include "Core/vendor/imgui"

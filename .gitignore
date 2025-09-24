@@ -11,7 +11,7 @@ Binaries-Intermediates/
 *.log
 *.lnk
 Icon.txt
-AddSubmodules.txt
+TODO.txt
 *.png
 Makefile
 

@@ -1,0 +1,9 @@
+[submodule "Core/vendor/JSON"]
+	path = Core/vendor/JSON
+	url = git@github.com:open-source-parsers/jsoncpp.git
+[submodule "Core/vendor/GLFW"]
+	path = Core/vendor/GLFW
+	url = git@github.com:glfw/glfw
+[submodule "Core/vendor/imgui"]
+	path = Core/vendor/imgui
+	url = git@github.com:TheLinys/imgui

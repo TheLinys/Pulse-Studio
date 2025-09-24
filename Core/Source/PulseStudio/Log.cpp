@@ -3,7 +3,8 @@
 #include "Log.h"
 
 // Get singleton instance
-Logger& Logger::getInstance() {
+Logger& Logger::getInstance()
+{
     static Logger instance;
     return instance;
 }
@@ -21,15 +22,18 @@ Logger::Logger()
 }
 
 // Destructor
-Logger::~Logger() {
+Logger::~Logger()
+{
     shutdown();
 }
 
 // Initialize the logger
-void Logger::init(const std::string& logFilePath, LogLevel consoleLevel, LogLevel fileLevel) {
+void Logger::init(const std::string& logFilePath, LogLevel consoleLevel, LogLevel fileLevel)
+{
     std::lock_guard<std::mutex> lock(m_mutex);
 
-    if (m_initialized) {
+    if (m_initialized)
+    {
         return;
     }
 
@@ -38,7 +42,8 @@ void Logger::init(const std::string& logFilePath, LogLevel consoleLevel, LogLeve
 
     // Open log file
     m_logFile.open(logFilePath, std::ios::out | std::ios::app);
-    if (!m_logFile.is_open()) {
+    if (!m_logFile.is_open()) 
+    {
         std::cerr << "Failed to open log file: " << logFilePath << std::endl;
         return;
     }
@@ -49,34 +54,38 @@ void Logger::init(const std::string& logFilePath, LogLevel consoleLevel, LogLeve
     m_initialized = true;
 
     std::string timestamp = getTimestamp();
-    std::string message = "Logger initialized successfully";
+    std::string message = "Logger initialized successfully.";
     std::string fullMessage = "[" + timestamp + "][Success] -> " + message;
 
     std::cout << "\033[32m" << fullMessage << "\033[0m \n";
 
-    if (m_logFile.is_open()) {
+    if (m_logFile.is_open())
+    {
         m_logFile << fullMessage << std::endl;
         m_logFile.flush();
     }
 }
 // Set console log level
-void Logger::setConsoleLevel(LogLevel level) {
+void Logger::setConsoleLevel(LogLevel level)
+{
     std::lock_guard<std::mutex> lock(m_mutex);
     m_consoleLevel = level;
 }
 
 // Set file log level
-void Logger::setFileLevel(LogLevel level) {
+void Logger::setFileLevel(LogLevel level)
+{
     std::lock_guard<std::mutex> lock(m_mutex);
     m_fileLevel = level;
 }
 
 // Core logging method
-void Logger::log(LogLevel level, const std::string& message,
-    const std::string& file, int line) {
+void Logger::log(LogLevel level, const std::string& message, const std::string& file, int line)
+{
     std::lock_guard<std::mutex> lock(m_mutex);
 
-    if (!m_initialized) {
+    if (!m_initialized) 
+    {
         return;
     }
 
@@ -90,15 +99,18 @@ void Logger::log(LogLevel level, const std::string& message,
     std::string fullMessage = logMessage.str();
 
     // Output to console if level is sufficient
-    if (static_cast<int>(level) >= static_cast<int>(m_consoleLevel)) {
+    if (static_cast<int>(level) >= static_cast<int>(m_consoleLevel))
+    {
 #ifdef _WIN32
-        if (m_consoleColorSupported) {
+        if (m_consoleColorSupported)
+        {
             // Set console color
             std::cout << getConsoleColor(level);
             std::cout << fullMessage << std::endl;
             std::cout << getResetColor();
         }
-        else {
+        else 
+        {
             std::cout << fullMessage << std::endl;
         }
 #else
@@ -111,34 +123,41 @@ void Logger::log(LogLevel level, const std::string& message,
     }
 
     // Output to file if level is sufficient
-    if (static_cast<int>(level) >= static_cast<int>(m_fileLevel) && m_logFile.is_open()) {
+    if (static_cast<int>(level) >= static_cast<int>(m_fileLevel) && m_logFile.is_open()) 
+    {
         m_logFile << fullMessage << std::endl;
         m_logFile.flush(); // Ensure immediate write
     }
 }
 
 // Convenience logging methods
-void Logger::debug(const std::string& message, const std::string& file, int line) {
+void Logger::debug(const std::string& message, const std::string& file, int line)
+{
     log(LogLevel::Debug, message, file, line);
 }
 
-void Logger::trace(const std::string& message, const std::string& file, int line) {
+void Logger::trace(const std::string& message, const std::string& file, int line)
+{
     log(LogLevel::Trace, message, file, line);
 }
 
-void Logger::info(const std::string& message, const std::string& file, int line) {
+void Logger::info(const std::string& message, const std::string& file, int line)
+{
     log(LogLevel::Info, message, file, line);
 }
 
-void Logger::warn(const std::string& message, const std::string& file, int line) {
+void Logger::warn(const std::string& message, const std::string& file, int line)
+{
     log(LogLevel::Warn, message, file, line);
 }
 
-void Logger::error(const std::string& message, const std::string& file, int line) {
+void Logger::error(const std::string& message, const std::string& file, int line)
+{
     log(LogLevel::Error, message, file, line);
 }
 
-void Logger::fatal(const std::string& message, const std::string& file, int line) {
+void Logger::fatal(const std::string& message, const std::string& file, int line)
+{
     log(LogLevel::Fatal, message, file, line);
 }
 
@@ -147,18 +166,21 @@ void Logger::shutdown()
 {
     std::lock_guard<std::mutex> lock(m_mutex);
 
-    if (m_initialized) {
+    if (m_initialized) 
+    {
         std::string message = "Logger shutting down";
         std::string timestamp = getTimestamp();
         std::string fullMessage = "[" + timestamp + "][Info] -> " + message;
 
         std::cout << fullMessage << std::endl;
 
-        if (m_logFile.is_open()) {
+        if (m_logFile.is_open())
+        {
             m_logFile << fullMessage << std::endl;
         }
 
-        if (m_logFile.is_open()) {
+        if (m_logFile.is_open())
+        {
             m_logFile.close();
         }
 
@@ -171,8 +193,7 @@ std::string Logger::getTimestamp()
 {
     auto now = std::chrono::system_clock::now();
     auto time = std::chrono::system_clock::to_time_t(now);
-    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(
-        now.time_since_epoch()) % 1000;
+    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
 
     std::stringstream ss;
     ss << std::put_time(std::localtime(&time), "%Y/%m/%d %H:%M:%S")
@@ -197,8 +218,10 @@ std::string Logger::levelToString(LogLevel level)
 }
 
 // Get console color code for log level
-std::string Logger::getConsoleColor(LogLevel level) {
-    switch (level) {
+std::string Logger::getConsoleColor(LogLevel level) 
+{
+    switch (level) 
+    {
     case LogLevel::Debug:    return "\033[94m";  // Light blue
     case LogLevel::Trace:    return "\033[37m";  // Light gray
     case LogLevel::Info:     return "\033[0m";   // White (default)
@@ -210,18 +233,23 @@ std::string Logger::getConsoleColor(LogLevel level) {
 }
 
 // Reset console color
-std::string Logger::getResetColor() {
+std::string Logger::getResetColor()
+{
     return "\033[0m";
 }
 
 // Initialize console color support (Windows)
-void Logger::initConsoleColor() {
+void Logger::initConsoleColor() 
+{
 #ifdef _WIN32
     m_consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-    if (m_consoleHandle != INVALID_HANDLE_VALUE) {
+    if (m_consoleHandle != INVALID_HANDLE_VALUE)
+    {
         DWORD mode;
-        if (GetConsoleMode(m_consoleHandle, &mode)) {
-            if (SetConsoleMode(m_consoleHandle, mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING)) {
+        if (GetConsoleMode(m_consoleHandle, &mode)) 
+        {
+            if (SetConsoleMode(m_consoleHandle, mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING))
+            {
                 m_consoleColorSupported = true;
             }
         }

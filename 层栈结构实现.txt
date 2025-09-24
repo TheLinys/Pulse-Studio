@@ -1,0 +1,21 @@
+层栈结构实现：
+    阶段1：基础框架
+        实现 DockableWindow 基类
+        
+        创建 WindowManager 单例
+        
+        集成 ImGui 停靠系统
+    
+    阶段2：核心窗口
+        实现 EditorWindow、ProjectExplorerWindow 等核心窗口
+        
+        添加基本的窗口管理功能
+        
+        实现窗口的创建和关闭
+    
+    阶段3：高级特性
+        实现布局保存/加载
+        
+        添加窗口间通信
+        
+        优化性能和内存管理
