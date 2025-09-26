@@ -13,6 +13,9 @@ namespace PulseStudio {
 		WindowsWindow(const WindowProps& props);
 		virtual ~WindowsWindow();
 
+		void Shutdown();
+		void Init(const WindowProps& props);
+
 		void OnUpdate() override;
 
 		// Window attributes
@@ -24,17 +27,23 @@ namespace PulseStudio {
 		unsigned int GetHeight() const override;
 
 		static Window* Create(const WindowProps& props = WindowProps());
+
+		void* GetNativeWindow() const override;
 	private:
 		GLFWwindow* m_Window;
 
 		struct WindowData
 		{
 			std::string Title;
-			uint32_t Width, Height;
+			unsigned int Width, Height;
 			bool VSync;
+
+			EventCallbackFn EventCallback;
 		};
 
 		WindowData m_Data;
+
+		unsigned int m_Width, m_Height;
 	};
 
 }

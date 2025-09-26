@@ -9,13 +9,21 @@
 
 namespace PulseStudio {
 
+#define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
+
+	Application* Application::s_Instance = nullptr;
+
 	Application::Application()
     {
+		PS_CORE_ASSERT(!s_Instance, "Application already exists!");
+		s_Instance = this;
+
         // Initialize the logger in the constructor
         Logger::getInstance().init("PulseStudioLog.log", LogLevel::Debug, LogLevel::Debug);
         LOG_INFO("Application constructor called.");
         WindowProps props("Pulse Studio", 1700, 1000);
         m_MainWindow = std::unique_ptr<Window>(Window::Create(props));
+		m_MainWindow->SetEventCallback(BIND_EVENT_FN(OnEvent));
     }
 
     Application::~Application()
@@ -40,6 +48,7 @@ namespace PulseStudio {
 
     void Application::OnEvent(Event& e)
     {
+		LOG_CORE_INFO(e.ToString());
         EventDispatcher dispatcher(e);
         dispatcher.Dispatch<WindowCloseEvent>(std::bind(&Application::OnWindowClose, this, std::placeholders::_1));
         for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
@@ -54,13 +63,15 @@ namespace PulseStudio {
     {
         LOG_TRACE("Pulse Studio initialized and running.");
 
-
-        do {
-            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        do 
+        {
+            glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
             for (Layer* layer : m_LayerStack)
-				layer->OnUpdate(0.0f); // TODO: Replace 0.0f with actual delta time
+               layer->OnUpdate(0.0f); // TODO: Replace 0.0f with actual delta time
+
+			m_MainWindow->OnUpdate();
         } while (m_Running);
     }
 

@@ -13,7 +13,7 @@ namespace PulseStudio {
 	enum class EventType
 	{
 		Nore = 0,
-		WindowClose, Windowresize, WindowFocus, WindowMoved,
+		WindowClose, WindowResize, WindowFocus, WindowMoved,
 		AppTick, AppUpdate, AppRender,
 		KeyPressed, KeyReleased,
 		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled
@@ -41,7 +41,7 @@ namespace PulseStudio {
 		virtual const char* GetName() const = 0;
 		virtual int GetCategoryFlags() const = 0;
 		virtual std::string ToString() const { return GetName(); }
-		inline bool IsInCategory(EventCategory category)
+		inline bool IsInCategory(EventCategory category) const
 		{
 			return GetCategoryFlags() & category;
 		}

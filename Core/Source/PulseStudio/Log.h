@@ -73,11 +73,11 @@ private:
     void initConsoleColor();
 
     // Member variables
+    bool m_initialized;
     std::ofstream m_logFile;
     LogLevel m_consoleLevel;
     LogLevel m_fileLevel;
     std::mutex m_mutex;
-    bool m_initialized;
 
 #ifdef _WIN32
     HANDLE m_consoleHandle;

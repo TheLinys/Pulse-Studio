@@ -19,6 +19,9 @@ namespace PulseStudio {
 
 		void PushLayer(class Layer* layer);
 		void PushOverlay(class Layer* overlay);
+
+		inline static Application& Get() { return *s_Instance; }
+		inline Window& GetWindow() { return *m_Window; }
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 
@@ -26,8 +29,10 @@ namespace PulseStudio {
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 		Window* m_Window;
+		static Application* s_Instance;
 	};
 
+	// To be defined in CLIENT 
 	PulseStudio::Application* CreateApplication();
 
 }

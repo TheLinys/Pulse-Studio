@@ -1,7 +1,7 @@
 project "Core"
     kind "StaticLib"
     language "C++"
-    cppdialect "C++20"
+    cppdialect "C++23"
     targetdir "Binaries/%{cfg.buildcfg}"
     staticruntime "off"
     
@@ -12,10 +12,9 @@ project "Core"
     
     includedirs
     {
-       "Source",
-       "vendor/GLFW/include",
-       "vendor/Glad/include",
-       "vendor/imgui",
+        "Source",
+        "vendor/GLFW/include",
+        "vendor/Glad/include"
     }
     
     defines
@@ -29,7 +28,6 @@ project "Core"
     {
          "GLFW",
          "Glad",
-         "ImGui",
          "opengl32.lib"
     }
     
