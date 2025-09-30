@@ -12,6 +12,9 @@
 /// @brief Min and max functions that return associated values not the compared ones.
 
 #pragma once
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 // Dependency:
 #include "../glm.hpp"

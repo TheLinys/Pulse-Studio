@@ -20,6 +20,12 @@ project "GLM"
 		""
 	}
 
+	defines
+	{
+		"GLM_ENABLE_EXPERIMENTAL",
+		"GLM_FORCE_XYZW"
+	}
+
 	filter "system:linux"
 		pic "On"
 
