@@ -26,7 +26,7 @@ public:
     static Logger& getInstance();
 
     // Initialize the logger
-    void init(const std::string& logFilePath = "PulseStudioLog.log",
+    void init(const std::string& logFilePath = "C:/Log/PulseStudioLog.log",
         LogLevel consoleLevel = LogLevel::Debug,  // Changed to show debug by default
         LogLevel fileLevel = LogLevel::Debug);
 
@@ -51,8 +51,8 @@ public:
 
     // Disable copying and assignment
     Logger(const Logger&) = delete;
+    Logger(const Logger&&) = delete;
     Logger& operator=(const Logger&) = delete;
-
 private:
     Logger();
     ~Logger();
@@ -101,7 +101,15 @@ private:
 #define LOG_CORE_ERROR(msg) Logger::getInstance().error(msg, __FILE__, __LINE__)
 #define LOG_CORE_FATAL(msg) Logger::getInstance().fatal(msg, __FILE__, __LINE__)
 
-// Variadic macros for formatted logging (using fmt library)
+// VariPS macros for formatted logging (using fmt library)
+#define PS_DEBUG(msg) Logger::getInstance().debug(msg, __FILE__, __LINE__)
+#define PS_TRACE(msg) Logger::getInstance().trace(msg, __FILE__, __LINE__)
+#define PS_INFO(msg) Logger::getInstance().info(msg, __FILE__, __LINE__)
+#define PS_WARN(msg) Logger::getInstance().warn(msg, __FILE__, __LINE__)
+#define PS_ERROR(msg) Logger::getInstance().error(msg, __FILE__, __LINE__)
+#define PS_FATAL(msg) Logger::getInstance().fatal(msg, __FILE__, __LINE__)
+
+// VariPS_Core macros for formatted logging (using fmt library)
 #define PS_CORE_FATAL(...) Logger::getInstance().fatal(__VA_ARGS__)
 #define PS_CORE_ERROR(...) Logger::getInstance().error(__VA_ARGS__)
 #define PS_CORE_WARN(...) Logger::getInstance().warn(__VA_ARGS__)

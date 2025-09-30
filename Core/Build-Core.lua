@@ -14,7 +14,8 @@ project "Core"
     {
         "Source",
         "vendor/GLFW/include",
-        "vendor/Glad/include"
+        "vendor/Glad/include",
+        "vendor/glm"
     }
     
     defines
@@ -28,6 +29,7 @@ project "Core"
     {
          "GLFW",
          "Glad",
+         "GLM",
          "opengl32.lib"
     }
     

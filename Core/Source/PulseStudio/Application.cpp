@@ -7,6 +7,8 @@
 
 #include <glad/glad.h>
 
+#include "Input.h"
+
 namespace PulseStudio {
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
@@ -19,7 +21,7 @@ namespace PulseStudio {
 		s_Instance = this;
 
         // Initialize the logger in the constructor
-        Logger::getInstance().init("PulseStudioLog.log", LogLevel::Debug, LogLevel::Debug);
+        Logger::getInstance().init("C:/Log/PulseStudioLog.log", LogLevel::Debug, LogLevel::Debug);
         LOG_INFO("Application constructor called.");
         WindowProps props("Pulse Studio", 1700, 1000);
         m_MainWindow = std::unique_ptr<Window>(Window::Create(props));
@@ -71,11 +73,15 @@ namespace PulseStudio {
             for (Layer* layer : m_LayerStack)
                layer->OnUpdate(0.0f); // TODO: Replace 0.0f with actual delta time
 
+			auto [x, y] = Input::GetMousePosition();
+			LOG_CORE_TRACE(std::format("{0}, {1}", x, y));
+
 			m_MainWindow->OnUpdate();
         } while (m_Running);
     }
 
-    bool Application::OnWindowClose(WindowCloseEvent& e) {
+    bool Application::OnWindowClose(WindowCloseEvent& e) 
+    {
         m_Running = false;
         return true;
     }

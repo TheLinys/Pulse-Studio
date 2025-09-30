@@ -2,6 +2,8 @@
 .vs/
 Binaries/
 Binaries-Intermediates/
+Core/vendor/Binaries/
+Core/vendor/Binaries-Intermediates/
 
 # Files
 *.vcxproj

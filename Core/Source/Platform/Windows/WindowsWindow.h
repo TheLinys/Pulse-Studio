@@ -28,7 +28,7 @@ namespace PulseStudio {
 
 		static Window* Create(const WindowProps& props = WindowProps());
 
-		void* GetNativeWindow() const override;
+		inline virtual void* GetNativeWindow() const override;
 	private:
 		GLFWwindow* m_Window;
 

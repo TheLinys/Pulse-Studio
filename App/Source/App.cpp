@@ -1,33 +1,6 @@
 #include <Pulse.h>
 #include <iostream>
 
-class ImGuiLayer : public PulseStudio::Layer
-{
-public:
-	ImGuiLayer()
-		: Layer("ImGuiLayer")
-	{
-	}
-	~ImGuiLayer()
-	{
-	}
-	void OnAttach() override
-	{
-		PulseStudio::Layer::OnAttach();
-	}
-	void OnDetach() override
-	{
-	}
-	void OnUpdate(float deltaTime) override
-	{
-		LOG_CORE_DEBUG("ExampleLayer::Update");
-	}
-	void OnEvent(PulseStudio::Event& event) override
-	{
-		LOG_TRACE(event.ToString());
-	}
-};
-
 class SandboxApp : public PulseStudio::Application
 {
 public:
