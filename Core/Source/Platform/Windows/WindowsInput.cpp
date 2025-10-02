@@ -6,7 +6,15 @@
 
 namespace PulseStudio {
 
-	Input* Input::s_Instance = new WindowsInput();
+	Input* Input::s_Instance = nullptr;
+
+	void Input::Init()
+	{
+		if (!s_Instance)
+		{
+			s_Instance = new WindowsInput();
+		}
+	}
 
 	bool WindowsInput::IsKeyPressedImpl(int keycode)
 	{

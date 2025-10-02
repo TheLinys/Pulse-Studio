@@ -27,6 +27,9 @@
 #include "PulseStudio/Core.h"
 #include "PulseStudio/Log.h"
 
+#include "PulseStudio/KeyCodes.h"
+#include "PulseStudio/MouseButtonCodes.h"
+
 #ifdef PS_PLATFORM_WINDOWS
 	#include <Windows.h>
 #endif

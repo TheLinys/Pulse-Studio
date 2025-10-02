@@ -26,6 +26,9 @@ namespace PulseStudio {
         WindowProps props("Pulse Studio", 1700, 1000);
         m_MainWindow = std::unique_ptr<Window>(Window::Create(props));
 		m_MainWindow->SetEventCallback(BIND_EVENT_FN(OnEvent));
+
+        Input::Init();
+        LOG_INFO("Input system initialized");
     }
 
     Application::~Application()
@@ -71,17 +74,21 @@ namespace PulseStudio {
             glClear(GL_COLOR_BUFFER_BIT);
 
             for (Layer* layer : m_LayerStack)
-               layer->OnUpdate(0.0f); // TODO: Replace 0.0f with actual delta time
-
-			auto [x, y] = Input::GetMousePosition();
-			LOG_CORE_TRACE(std::format("{0}, {1}", x, y));
+            {
+                layer->OnUpdate(0.0f); // TODO: Replace 0.0f with actual delta time
+				PS_CORE_INFO("Layer Updated.");
+            }
 
 			m_MainWindow->OnUpdate();
+
+            /*auto [x, y] = Input::GetMousePosition();
+            PS_CORE_TRACE(std::format("Mouse Position: ({0}, {1})", x, y));*/
         } while (m_Running);
     }
 
     bool Application::OnWindowClose(WindowCloseEvent& e) 
     {
+		LOG_TRACE("Window close event received. Shutting down Application...");
         m_Running = false;
         return true;
     }
