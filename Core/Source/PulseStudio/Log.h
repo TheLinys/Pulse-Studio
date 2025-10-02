@@ -26,7 +26,7 @@ public:
     static Logger& getInstance();
 
     // Initialize the logger
-    void init(const std::string& logFilePath = "C:/Log/PulseStudioLog.log",
+    void init(const std::string& logFilePath = "Logs/PulseStudioLog.log",
         LogLevel consoleLevel = LogLevel::Debug,  // Changed to show debug by default
         LogLevel fileLevel = LogLevel::Debug);
 

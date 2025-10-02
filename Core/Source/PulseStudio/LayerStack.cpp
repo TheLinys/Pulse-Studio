@@ -36,4 +36,12 @@ namespace PulseStudio {
 			m_Layers.erase(it);
 	}
 
+	void LayerStack::Clear()
+	{
+		for (Layer* layer : m_Layers)
+			delete layer;
+		m_Layers.clear();
+		m_LayerInsert = m_Layers.begin();
+	}
+
 }

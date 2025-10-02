@@ -9,11 +9,34 @@
 
 #include "Input.h"
 
+#include "Layers/WelcomeLayer.h"
+#include "Layers/DashboardLayer.h"
+#include "Layers/WorkspaceLayer.h"
+
 namespace PulseStudio {
 
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
 	Application* Application::s_Instance = nullptr;
+
+    bool createDirectoryIfNotExists(const std::string& path)
+    {
+        namespace fs = std::filesystem;
+
+        try 
+        {
+            if (!fs::exists(path))
+            {
+                return fs::create_directories(path);
+            }
+            return true;
+        }
+        catch (const fs::filesystem_error& ex)
+        {
+            std::cerr << ex.what() << std::endl;
+            return false;
+        }
+    }
 
 	Application::Application()
     {
@@ -21,11 +44,24 @@ namespace PulseStudio {
 		s_Instance = this;
 
         // Initialize the logger in the constructor
-        Logger::getInstance().init("C:/Log/PulseStudioLog.log", LogLevel::Debug, LogLevel::Debug);
+        if (createDirectoryIfNotExists("Logs"))
+        {
+            Logger::getInstance().init("Logs/PulseStudioLog.log", LogLevel::Debug, LogLevel::Debug);
+        }
         LOG_INFO("Application constructor called.");
+
         WindowProps props("Pulse Studio", 1700, 1000);
         m_MainWindow = std::unique_ptr<Window>(Window::Create(props));
 		m_MainWindow->SetEventCallback(BIND_EVENT_FN(OnEvent));
+
+		// Set state change callback
+        AppStateManager::getInstance().SetStateChangeCallback([this](AppState newState)
+        {
+            this->SwitchToState(newState);
+        });
+
+		// initial state
+        SwitchToState(AppState::Welcome);
 
         Input::Init();
         LOG_INFO("Input system initialized");
@@ -66,7 +102,7 @@ namespace PulseStudio {
 
     void Application::Run()
     {
-        LOG_TRACE("Pulse Studio initialized and running.");
+        LOG_TRACE("Pulse Studio initialized and running."); 
 
         do 
         {
@@ -76,13 +112,9 @@ namespace PulseStudio {
             for (Layer* layer : m_LayerStack)
             {
                 layer->OnUpdate(0.0f); // TODO: Replace 0.0f with actual delta time
-				PS_CORE_INFO("Layer Updated.");
             }
 
 			m_MainWindow->OnUpdate();
-
-            /*auto [x, y] = Input::GetMousePosition();
-            PS_CORE_TRACE(std::format("Mouse Position: ({0}, {1})", x, y));*/
         } while (m_Running);
     }
 
@@ -91,6 +123,31 @@ namespace PulseStudio {
 		LOG_TRACE("Window close event received. Shutting down Application...");
         m_Running = false;
         return true;
+    }
+
+    void Application::SwitchToState(AppState newState)
+    {
+		// Clear existing layers
+        m_LayerStack.Clear();
+
+		// Add layers based on the new state
+        switch (newState)
+        {
+        case AppState::Welcome:
+            PushLayer(new WelcomeLayer());
+            break;
+
+        case AppState::Dashboard:
+            PushLayer(new DashboardLayer());
+            break;
+
+        case AppState::Workspace:
+            PushLayer(new WorkspaceLayer());
+            break;
+        }
+
+        m_CurrentState = newState;
+        PS_INFO(std::format("Switched to state: {0}", static_cast<int>(newState)));
     }
 
 }
