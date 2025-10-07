@@ -43,10 +43,10 @@ PulseStudio::Application* PulseStudio::CreateApplication()
 	return new SandboxApp();
 }
 
-static void ChangeConsoelStatus(bool Isshow)
+static void ChangeConsoelStatus(bool IsShow)
 {
 	HWND hwnd = GetConsoleWindow();
-	if (Isshow)
+	if (IsShow)
 	{
 		ShowWindow(hwnd, SW_SHOW); // Show Console
 		PS_INFO("Console is Showed.");

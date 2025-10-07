@@ -4,14 +4,12 @@
 #include "Events/ApplicationEvent.h"
 #include "Log.h"
 #include "Window.h"
+#include "Tools/Tool.h"
+#include "Tools/Button.h"
 
 #include <glad/glad.h>
 
 #include "Input.h"
-
-#include "Layers/WelcomeLayer.h"
-#include "Layers/DashboardLayer.h"
-#include "Layers/WorkspaceLayer.h"
 
 namespace PulseStudio {
 
@@ -54,17 +52,9 @@ namespace PulseStudio {
         m_MainWindow = std::unique_ptr<Window>(Window::Create(props));
 		m_MainWindow->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
-		// Set state change callback
-        AppStateManager::getInstance().SetStateChangeCallback([this](AppState newState)
-        {
-            this->SwitchToState(newState);
-        });
-
-		// initial state
-        SwitchToState(AppState::Welcome);
-
         Input::Init();
-        LOG_INFO("Input system initialized");
+
+        InitializeTools();
     }
 
     Application::~Application()
@@ -102,7 +92,7 @@ namespace PulseStudio {
 
     void Application::Run()
     {
-        LOG_TRACE("Pulse Studio initialized and running."); 
+        LOG_TRACE("Pulse Studio initialized and running.");
 
         do 
         {
@@ -110,44 +100,41 @@ namespace PulseStudio {
             glClear(GL_COLOR_BUFFER_BIT);
 
             for (Layer* layer : m_LayerStack)
+                if (layer)
+                    layer->OnUpdate(0.0f);
+
+            if (m_MainWindow)
             {
-                layer->OnUpdate(0.0f); // TODO: Replace 0.0f with actual delta time
+                m_MainWindow->OnUpdate();
+            }
+            else
+            {
+                PS_CORE_ERROR("Main window is null!");
+                m_Running = false;
             }
 
-			m_MainWindow->OnUpdate();
+			// Add a small sleep to prevent high CPU usage
+            std::this_thread::sleep_for(std::chrono::milliseconds(16));
         } while (m_Running);
     }
 
     bool Application::OnWindowClose(WindowCloseEvent& e) 
     {
-		LOG_TRACE("Window close event received. Shutting down Application...");
+		LOG_WARN("Window close event received. Shutting down Application...");
         m_Running = false;
         return true;
     }
 
-    void Application::SwitchToState(AppState newState)
+    void Application::InitializeTools()
     {
-		// Clear existing layers
-        m_LayerStack.Clear();
+        ToolProps props1("Properties", true, ToolState::Right);
+        m_Tools.push_back(std::unique_ptr<Tool>(Tool::Create(props1)));
 
-		// Add layers based on the new state
-        switch (newState)
-        {
-        case AppState::Welcome:
-            PushLayer(new WelcomeLayer());
-            break;
+        for (auto& tool : m_Tools)
+            if (tool)
+                tool->OnAttach();
 
-        case AppState::Dashboard:
-            PushLayer(new DashboardLayer());
-            break;
-
-        case AppState::Workspace:
-            PushLayer(new WorkspaceLayer());
-            break;
-        }
-
-        m_CurrentState = newState;
-        PS_INFO(std::format("Switched to state: {0}", static_cast<int>(newState)));
+        LOG_INFO("Tools system initialized with " + std::to_string(m_Tools.size()) + " tool(s).");
     }
 
 }

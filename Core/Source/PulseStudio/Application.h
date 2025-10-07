@@ -1,10 +1,10 @@
 #pragma once
 
+#include "Tools/Tool.h"
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
 #include "Window.h"
 #include "LayerStack.h"
-#include "AppState.h"
 
 namespace PulseStudio {
 
@@ -21,20 +21,19 @@ namespace PulseStudio {
 		void PushLayer(class Layer* layer);
 		void PushOverlay(class Layer* overlay);
 
-		// State Management
-		void SwitchToState(AppState newState);
-
 		inline static Application& Get() { return *s_Instance; }
 		inline Window& GetWindow() { return *m_MainWindow; }
+		
+		void InitializeTools();
 	private:
+		std::vector<std::unique_ptr<Tool>> m_Tools;
 		bool OnWindowClose(WindowCloseEvent& e);
 
 		std::unique_ptr<class Window> m_MainWindow;
+		std::unique_ptr<class Tool> m_StaticTool;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
 		static Application* s_Instance;
-
-		AppState m_CurrentState = AppState::Welcome;
 	};
 
 	// To be defined in CLIENT 
