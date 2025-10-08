@@ -15,7 +15,9 @@ project "Core"
         "Source",
         "vendor/GLFW/include",
         "vendor/Glad/include",
-        "vendor/glm"
+        "vendor/glm",
+        "vendor/stb_image",
+        "vendor/Freetype/include"
     }
     
     defines
@@ -30,6 +32,8 @@ project "Core"
          "GLFW",
          "Glad",
          "GLM",
+         "Freetype",
+         "stb_image",
          "opengl32.lib"
     }
     
