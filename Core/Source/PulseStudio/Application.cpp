@@ -4,8 +4,6 @@
 #include "Events/ApplicationEvent.h"
 #include "Log.h"
 #include "Window.h"
-#include "Tools/Tool.h"
-#include "Tools/Button.h"
 
 #include <glad/glad.h>
 
@@ -53,8 +51,6 @@ namespace PulseStudio {
 		m_MainWindow->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
         Input::Init();
-
-        InitializeTools();
     }
 
     Application::~Application()
@@ -94,10 +90,25 @@ namespace PulseStudio {
     {
         LOG_TRACE("Pulse Studio initialized and running.");
 
+        // Draw a Titlebar with a close button in the top right corner
+        float vertices[] =
+        {
+            // positions         // colors
+             0.9f,  0.9f, 0.0f,  1.0f, 0.0f, 0.0f, // top right
+             0.8f,  0.9f, 0.0f,  1.0f, 0.0f, 0.0f, // top left
+             0.8f,  0.8f, 0.0f,  1.0f, 0.0f, 0.0f, // bottom left
+             0.9f,  0.8f, 0.0f,  1.0f, 0.0f, 0.0f  // bottom right
+        };
+
         do 
         {
             glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
+            
+            glEnableClientState(GL_VERTEX_ARRAY);
+            glVertexPointer(2, GL_FLOAT, 0, vertices);
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+            glDisableClientState(GL_VERTEX_ARRAY);
 
             for (Layer* layer : m_LayerStack)
                 if (layer)
@@ -123,18 +134,6 @@ namespace PulseStudio {
 		LOG_WARN("Window close event received. Shutting down Application...");
         m_Running = false;
         return true;
-    }
-
-    void Application::InitializeTools()
-    {
-        ToolProps props1("Properties", true, ToolState::Right);
-        m_Tools.push_back(std::unique_ptr<Tool>(Tool::Create(props1)));
-
-        for (auto& tool : m_Tools)
-            if (tool)
-                tool->OnAttach();
-
-        LOG_INFO("Tools system initialized with " + std::to_string(m_Tools.size()) + " tool(s).");
     }
 
 }

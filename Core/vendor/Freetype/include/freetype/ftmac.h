@@ -23,7 +23,7 @@
  *       'Handle', 'FSSpec', 'FSRef', etc.)
  *
  */
-
+#pragma once
 
 #ifndef FTMAC_H_
 #define FTMAC_H_

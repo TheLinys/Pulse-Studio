@@ -1,5 +1,5 @@
 #define STB_DEFINE
-#include "stb.h"
+#include "../deprecated/stb.h"
 
 // true if no error
 int run_command(char *batch_file, char *command)

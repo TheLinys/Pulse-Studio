@@ -1,7 +1,7 @@
 // This program was used to encode the data for stb_simple_font.h
 
 #define STB_DEFINE
-#include "stb.h"
+#include "deprecated/stb.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 

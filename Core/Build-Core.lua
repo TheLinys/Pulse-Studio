@@ -32,8 +32,8 @@ project "Core"
          "GLFW",
          "Glad",
          "GLM",
-         "Freetype",
-         "stb_image",
+        --  "Freetype",
+         "Image",
          "opengl32.lib"
     }
     

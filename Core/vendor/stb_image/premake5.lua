@@ -1,4 +1,4 @@
-project "Freetype"
+project "Image"
 	kind "StaticLib"
 	language "C++"
 	staticruntime "off"
@@ -16,6 +16,11 @@ project "Freetype"
 		"**.dsp",
 		"**.list"
     }
+
+	includedirs
+	{
+		""
+	}
 
 	filter "system:linux"
 		pic "On"

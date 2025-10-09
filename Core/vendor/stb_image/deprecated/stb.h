@@ -202,6 +202,7 @@ CREDITS
   Brian Collins
   Kyle Langley
 */
+#pragma once
 
 #include <stdarg.h>
 
@@ -212,6 +213,13 @@ CREDITS
 
 #ifdef STB_INTROSPECT
    #define STB_DEFINE
+#endif
+
+#ifdef _WIN32
+#include <windows.h>
+#include <fileapi.h>
+#else
+#include <dirent.h>
 #endif
 
 #ifdef STB_DEFINE_THREADS

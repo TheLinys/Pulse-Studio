@@ -41,8 +41,8 @@
    */
 
 
-#include <freetype/freetype.h>
-#include <freetype/internal/ftdebug.h>
+#include "freetype/freetype.h"
+#include "freetype/internal/ftdebug.h"
 
 
 #ifdef FT_DEBUG_LEVEL_ERROR

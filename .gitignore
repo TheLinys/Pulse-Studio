@@ -14,7 +14,6 @@ Core/vendor/Binaries-Intermediates/
 *.lnk
 Icon.txt
 TODO.txt
-层栈结构实现.txt
 *.png
 Makefile
 

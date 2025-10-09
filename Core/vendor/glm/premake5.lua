@@ -12,7 +12,7 @@ project "glm"
 		"**.h",
 		"**.hpp",
 		"**.cpp",
-		"**inl"
+		"**.inl"
 	}
 
 	includedirs

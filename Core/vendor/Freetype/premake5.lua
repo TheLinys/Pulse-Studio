@@ -22,6 +22,11 @@ project "Freetype"
 		"**.html"
     }
 
+	includedirs
+	{
+		"include"
+	}
+
 	filter "system:linux"
 		pic "On"
 

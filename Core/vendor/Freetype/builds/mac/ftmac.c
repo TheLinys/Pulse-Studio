@@ -65,7 +65,6 @@
 #include <freetype/freetype.h>
 #include <freetype/tttags.h>
 #include <freetype/internal/ftstream.h>
-#include "ftbase.h"
 
 #if defined( __GNUC__ ) || defined( __IBMC__ )
   /* This is for Mac OS X.  Without redefinition, OS_INLINE */
@@ -79,12 +78,7 @@
 #include <ApplicationServices/ApplicationServices.h>
 #include <sys/syslimits.h> /* PATH_MAX */
 #else
-#include <Resources.h>
-#include <Fonts.h>
-#include <Endian.h>
 #include <Errors.h>
-#include <Files.h>
-#include <TextUtils.h>
 #endif
 
 #ifndef PATH_MAX
